@@ -41,7 +41,11 @@ module APN
       def process_devices
         APN::Feedback.devices.each do |device|
           if device.last_registered_at < device.feedback_at
-            device.destroy
+            if block_given?
+              yield(device)
+            else
+              device.destroy
+            end
           end
         end
       end # process_devices
